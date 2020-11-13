@@ -3,7 +3,7 @@
 ## The Dockerfile, the basis of all Docker images
 This is a basic bare bones `Dockerfile` for a .NET Core App. We will break it
 down, part by part. For .NET Core, the process is a two step process. First, we create
-a build image that we use to build the project. Them, we will use the results of that build
+a build image that we use to build the project. Then, we will use the results of that build
 to build a runtime image that will be used to actually run the project. First, take a look
 at the entire file, then we will break it down.
 
@@ -40,7 +40,7 @@ The first line
 `FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build`
  
 is saying to pull that image as the base for us to
-build our image on top of and it aliases it as `build` so we can reference it
+build our image on top of and alias it as `build` so we can reference it
 later when we create the runtime image. This base image has all of the dependencies
 we need to build our .NET Core project. The next line
 
@@ -56,8 +56,8 @@ The next thing we want to do is copy our local solution file to the image.
 The path starts from wherever you are running the `docker` command, and in this case we
 assume (you need to be) in the root directory of the project. This command says 'copy all of 
 the .sln files in the directory I am running the `docker build` command in to the root `/` dir
-of the image/container'. The next line is commented out, but if you had Nuget packages 
-(and most project do) this is where you would want to copy them as well. 
+of the image'. The next line is commented out, but if you had Nuget packages 
+(and most projects do) this is where you would want to copy them as well. 
 This example does not, thus it is commented out.
 
 The next line
@@ -87,7 +87,7 @@ we are targeting a Linux runtime. (The irony of running Microsoft code in Linux 
 cease to amaze me :D ).
 
 Now, we have created an image and used it to build our project. Next, it is time to create
-a runnable image that can be used as a container to to actual run our code. We start, again, 
+a runnable image that can be used as a container to to actually run our code. We start, again, 
 by pulling in a base image
 
 `FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime`
@@ -121,11 +121,11 @@ replace `[your-docker-hub-account]` with, well, your Dockerhub account).
 
 `docker build -f build/DockerExample.Dockerfile -t [your-docker-hub-account]/dotnetcoredockerexample .`
 
-What this command says is build an image using the Dockerfile (`-f` specifies the Dockerfile
-to use, if you do not specify a file it will use the `Dockerfile` (and it must be named
-`Dokerfile`) in the current working directory) `DockerExample.Dockerfile`
+What this command says is build an image using the Dockerfile `DockerExample.Dockerfile`
 that is in the `build` directory and tag is as `[your-docker-hub-account]/dotnetcoredockerexample` and use
-the current direcotry `.` as the build context. (Other build contexts are beyond the scope
+the current direcotry `.` as the build context. (Note: `-f` specifies the Dockerfile to use, if you do not specify
+a file it will use the `Dockerfile` (and it must be named `Dokerfile`) in the current working directory)
+(Note: Other build contexts are beyond the scope
 of this example).
 
 Now, we have built an image. At some point you will want to learn how to version your
